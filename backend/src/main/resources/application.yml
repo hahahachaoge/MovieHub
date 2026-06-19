@@ -1,0 +1,76 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: movie-website
+
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:movie_website}?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:123456}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      max-lifetime: 180000
+      connection-timeout: 30000
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      database: ${REDIS_DATABASE:0}
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+    default-property-inclusion: non_null
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+ai:
+  deepseek:
+    api-key: ${DEEPSEEK_API_KEY:}
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.movie.entity
+  global-config:
+    db-config:
+      id-type: AUTO
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+jwt:
+  secret: ${JWT_SECRET:MovieWebsiteSecretKey2024}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+# 支付宝沙箱配置（密钥从外部PEM文件读取，见 AlipayConfig.java）
+alipay:
+  app-id: ${ALIPAY_APP_ID:}
+  private-key-path: ${ALIPAY_PRIVATE_KEY_PATH:file:./certs/alipay-private-key.pem}
+  public-key-path: ${ALIPAY_PUBLIC_KEY_PATH:file:./certs/alipay-public-key.pem}
+  notify-url: ${ALIPAY_NOTIFY_URL:}
+  return-url: ${ALIPAY_RETURN_URL:http://localhost:5173/payment/result}
+  gateway-url: ${ALIPAY_GATEWAY_URL:https://openapi-sandbox.dl.alipaydev.com/gateway.do}
+
+logging:
+  level:
+    com.movie: DEBUG
+    org.springframework: INFO

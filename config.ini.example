@@ -1,0 +1,9 @@
+# Natapp 隧道配置模板
+# 复制此文件为 config.ini 并填入你的 authtoken
+# cp config.ini.example config.ini
+[default]
+authtoken=your_authtoken_here
+clienttoken=
+log=none
+loglevel=ERROR
+http_proxy=
